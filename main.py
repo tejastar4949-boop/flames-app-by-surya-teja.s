@@ -1,21 +1,14 @@
-from pyscript import sync, display
-
-# This tells the website the game has started
-display("", target="loading-msg")
+import js
 
 def run_game():
-    try:
-        # These will appear as pop-up boxes at the top of the browser
-        name1 = sync.input("Enter the first name:")
-        name2 = sync.input("Enter the second name:")
+    # We use js.prompt instead of sync.input
+    name1 = js.prompt("Enter the first name:")
+    name2 = js.prompt("Enter the second name:")
 
-        if not name1 or not name2:
-            print("You must enter two names!")
-            return
-
+    if name1 and name2:
         n1 = name1.lower().replace(" ", "")
         n2 = name2.lower().replace(" ", "")
-
+        
         list1, list2 = list(n1), list(n2)
         for char in list1[:]:
             if char in list2:
@@ -27,21 +20,17 @@ def run_game():
 
         if count > 0:
             while len(flames) > 1:
-                split_index = (count % len(flames)) - 1
-                if split_index >= 0:
-                    flames = flames[split_index + 1:] + flames[:split_index]
+                idx = (count % len(flames)) - 1
+                if idx >= 0:
+                    flames = flames[idx + 1:] + flames[:idx]
                 else:
                     flames.pop()
             
-            # This result will print onto the webpage itself
-            print(f"--- RESULT ---")
-            print(f"Names: {name1} & {name2}")
-            print(f"Status: {flames[0]}")
+            # Show the result in a pop-up box
+            js.alert(f"🔥 FLAMES Result: {flames[0]} 🔥")
         else:
-            print("The names are too similar to calculate!")
-            
-    except Exception as e:
-        print(f"Something went wrong: {e}")
+            js.alert("The names are too similar!")
+    else:
+        js.alert("Names are missing!")
 
-# Start the game
 run_game()
